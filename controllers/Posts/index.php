@@ -1,7 +1,7 @@
 <?php
 
 
-$config = require './config.php';
+$config = require base_path('config.php');
 
 $pdo = new Database($config['database']);
 

@@ -1,7 +1,7 @@
 <?php
-require base_path('/views/partials/head.blade.php');
-require base_path('/views/partials/nav.blade.php');
-require base_path('/views/partials/banner.blade.php');
+require base_path('views/partials/head.blade.php');
+require base_path('views/partials/nav.blade.php');
+require base_path('views/partials/banner.blade.php');
 ?>
 
 <main>
@@ -19,5 +19,5 @@ require base_path('/views/partials/banner.blade.php');
 </main>
 
 <?php
-require base_path('/views/partials/footer.blade.php');
+require base_path('views/partials/footer.blade.php');
 ?>

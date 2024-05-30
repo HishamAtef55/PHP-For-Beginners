@@ -1,9 +1,9 @@
 <?php
 
 
-$config = require './config.php';
+$config = require base_path('config.php');
 
-$currentUserId = 32;
+$currentUserId = 31;
 
 $pdo = new Database($config['database']);
 

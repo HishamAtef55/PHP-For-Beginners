@@ -12,5 +12,5 @@
 </main>
 
 <?php
-require base_path('/views/partials/footer.blade.php');
+require base_path('views/partials/footer.blade.php');
 ?>

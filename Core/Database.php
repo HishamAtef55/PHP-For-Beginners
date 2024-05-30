@@ -1,7 +1,6 @@
 <?php
 
-require_once 'config.php';
-
+require_once base_path('config.php');
 class Database
 {
     public $connection;
