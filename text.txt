@@ -1,0 +1,2 @@
+* php -h
+* php -S localhost:{$port} public/index.php
