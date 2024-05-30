@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+
 view("Posts/create.blade.php", [
     "heading" => "Create Posts",
 ]);
