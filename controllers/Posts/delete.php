@@ -6,7 +6,7 @@ use Core\Database;
 $config = require base_path('config.php');
 
 $pdo = new Database($config['database']);
-$currentUserId = 33;
+$currentUserId = 31;
 if ($_POST['_method'] === 'DELETE') {
     $q = "SELECT * FROM posts where id = :id";
 
