@@ -10,20 +10,21 @@ require base_path('views/partials/banner.blade.php');
     </a>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <?php foreach ($posts as $key => $post): ?>
-            <li>
+        <li>
 
-                <a href="/post?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
-                    <?= $post['title'] ?>
-                </a>
-
-            </li>
-            <a href="/post/edit?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
-                edit
+            <a href="/post?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
+                <?= $post['title'] ?>
             </a>
-            <form action="" method="post">
-                <input type="hidden" name="id" value="<?= $post['id'] ?>">
-                <button class="text-sm text-red-500">Delete</button>
-            </form>
+
+        </li>
+        <a href="/post/edit?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
+            edit
+        </a>
+        <form action="/post/delete" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="id" value="<?= $post['id'] ?>">
+            <button class="text-sm text-red-500">Delete</button>
+        </form>
         <?php endforeach; ?>
 
 
