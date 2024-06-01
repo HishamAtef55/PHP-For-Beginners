@@ -1,6 +1,11 @@
 <?php
 
-require_once base_path('config.php');
+namespace Core;
+
+use PDO;
+use Core\Response;
+use PDOException;
+
 class Database
 {
     public $connection;
@@ -22,7 +27,14 @@ class Database
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-    }
+    }    
+    /**
+     * query
+     *
+     * @param  mixed $query
+     * @param  array $params
+     * @return self
+     */
     public function query($query, $params = [])
     {
         $this->statement = $this->connection->prepare($query);
@@ -31,12 +43,22 @@ class Database
 
         return $this;
     }
-
+    
+    /**
+     * find
+     *
+     * @return array
+     */
     public function find()
     {
         return $this->statement->fetch();
     }
 
+    /**
+     * findOrFail
+     *
+     * @return array
+     */
     public function findOrFail()
     {
         $result = $this->find();
@@ -46,6 +68,11 @@ class Database
         return $result;
     }
 
+    /**
+     * get
+     *
+     * @return array
+     */
     public function get()
     {
         return $this->statement->fetchAll();

@@ -1,4 +1,4 @@
 <?php
-view("home.blade.php", [
+view("about.blade.php", [
     "heading" => "About Us"
 ]);

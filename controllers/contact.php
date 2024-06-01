@@ -1,5 +1,5 @@
 <?php
 
-view("home.blade.php", [
+view("contact.blade.php", [
     "heading" => "Contact Us"
 ]);

@@ -15,5 +15,8 @@ return [
     '/posts' => './controllers/Posts/index.php',
     '/post' => './controllers/Posts/show.php',
     '/post/create' => './controllers/Posts/create.php',
-
+    '/post/edit' => './controllers/Posts/edit.php',
+    '/post/update' => './controllers/Posts/update.php',
+    '/post/delete' => './controllers/Posts/delete.php',
+    
 ];

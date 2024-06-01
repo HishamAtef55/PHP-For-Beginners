@@ -7,13 +7,20 @@ require base_path('views/partials/banner.blade.php');
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <?php foreach ($posts as $key => $post): ?>
-        <li>
+            <li>
 
-            <a href="/post?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
-                <?= $post['title'] ?>
+                <a href="/post?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
+                    <?= $post['title'] ?>
+                </a>
+
+            </li>
+            <a href="/post/edit?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
+                edit
             </a>
 
-        </li>
+            <a href="/post/delete?id=<?= $post['id'] ?>" class="text-blue-500 hover:underline">
+               Delete
+            </a>
         <?php endforeach; ?>
 
         <a href="/post/create" class="text-red-500 hover:underline">
