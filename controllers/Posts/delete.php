@@ -6,7 +6,7 @@ use Core\Database;
 
 $pdo = App::resolve(Database::class);
 
-$currentUserId = 31;
+$currentUserId = $_SESSION['user']['id'];
 if ($_POST['_method'] === 'DELETE') {
     // find the corresponding note
     $q = "SELECT * FROM posts where id = :id";

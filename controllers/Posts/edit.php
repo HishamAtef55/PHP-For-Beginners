@@ -5,7 +5,7 @@ use Core\Database;
 
 $pdo = App::resolve(Database::class);
 
-$currentUserId = 31;
+$currentUserId = $_SESSION['user']['id'];;
 
 $id = $_GET['id'];
 

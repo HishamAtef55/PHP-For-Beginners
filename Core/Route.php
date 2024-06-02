@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Core;
 
+
+use Core\Middleware\Middleware;
+
 class Route
 {
 
@@ -16,9 +19,9 @@ class Route
      * @param  string $method
      * @return void
      */
-    public function __construct($uri, $controller, $method)
+    public function __construct($uri, $controller, $method, $middleware = null)
     {
-        self::$routes[] = compact('uri', 'controller', 'method');
+        self::$routes[] = compact('uri', 'controller', 'method', 'middleware');
     }
     /**
      * get
@@ -107,9 +110,8 @@ class Route
 
         foreach (self::$routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === $method) {
+                Middleware::resolve($route['middleware']);
                 return require base_path($route['controller']);
-            } elseif ($route['uri'] === $uri && $route['method'] != $method) {
-                self::abort(405);
             }
         }
 
@@ -128,5 +130,17 @@ class Route
         require base_path("views/{$code}.blade.php");
 
         die();
+    }
+
+    /**
+     * only
+     *
+     * @param  string $key
+     * @return void
+     */
+    public function only(
+        string $key
+    ) {
+        self::$routes[array_key_last(self::$routes)]['middleware'] = $key;
     }
 }
