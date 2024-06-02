@@ -5,7 +5,7 @@ use Core\Database;
 
 $pdo = App::resolve(Database::class);
 
-$currentUserId = 32;
+$currentUserId = $_SESSION['user']['id'];
 
 // find the corresponding note
 $q = "SELECT * FROM posts where id = :id";

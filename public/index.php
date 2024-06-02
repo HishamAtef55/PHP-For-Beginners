@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+
+
 use Core\Database;
 use Core\Route;
 

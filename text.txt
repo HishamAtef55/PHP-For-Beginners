@@ -1,2 +1,3 @@
 * php -h
 * php -S localhost:{$port} public/index.php
+* php --info #session.save.path 

@@ -12,4 +12,10 @@ class Validator
         $value = rtrim($value);
         return strlen($value) > $min && strlen($value) < $max;
     }
+
+    public static function email($email){
+        if (filter_has_var(INPUT_POST, 'email')) {
+          return filter_var($email,FILTER_VALIDATE_EMAIL);
+        }
+    }
 }
