@@ -1,5 +1,5 @@
 <?php
 
-view("home.blade.php", [
+return view("home.blade.php", [
     "heading" => "Home"
 ]);

@@ -1,11 +1,11 @@
 <?php
 
+use Core\App;
 use Core\Database;
 
 
-$config = require base_path('config.php');
+$pdo = App::resolve(Database::class);
 
-$pdo = new Database($config['database']);
 $currentUserId = 31;
 
 

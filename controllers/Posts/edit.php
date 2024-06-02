@@ -1,13 +1,15 @@
 <?php
 
+use Core\App;
 use Core\Database;
 
-$config = require base_path("config.php");
+$pdo = App::resolve(Database::class);
 
-$db = new Database($config['database']);
+$currentUserId = 31;
 
 $id = $_GET['id'];
 
+// find the corresponding note
 $q = "SELECT * FROM posts where id = :id";
 
 $id = $_GET['id'];
@@ -16,9 +18,13 @@ $params = [
     'id' => $id
 ];
 
-$post = $db->query($q, $params)->findOrFail();
+$post = $pdo->query($q, $params)->findOrFail();
+
+// authorize that the current user can edit the note
+authorize($post['user_id'] === $currentUserId);
 
 view('Posts/edit.blade.php', [
     'heading' => 'update post',
-    'post' => $post
+    'post' => $post,
+    'errors' => []
 ]);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Core;
 
@@ -11,7 +12,15 @@ class Database
     public $connection;
 
     public $statement;
-
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $config
+     * @param  mixed $username
+     * @param  mixed $password
+     * @return void
+     */
     public function __construct($config, $username = 'root', $password = '')
     {
         $dsn = 'mysql:' . http_build_query($config, '', ';');

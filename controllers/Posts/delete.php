@@ -1,19 +1,21 @@
 <?php
 
+use Core\App;
 use Core\Database;
 
 
-$config = require base_path('config.php');
+$pdo = App::resolve(Database::class);
 
-$pdo = new Database($config['database']);
 $currentUserId = 31;
 if ($_POST['_method'] === 'DELETE') {
+    // find the corresponding note
     $q = "SELECT * FROM posts where id = :id";
 
     $id = $_POST['id'];
 
     $post = $pdo->query($q, ['id' => $id])->findOrFail();
 
+    // authorize that the current user can edit the note
     authorize($post['user_id'] === $currentUserId);
 
     $query = "DELETE FROM posts WHERE id = :id";
