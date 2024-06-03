@@ -38,8 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ])->find();
 
     if ($user) {
-        header('location: /');
-        exit();
+        $errors['email'] = 'user already exists';
+        return view('Auth/register.blade.php', [
+            'errors' => $errors,
+            'heading' => 'Registration'
+        ]);
     } else {
         $query = "INSERT INTO users (email,password,username) VALUES (:email,:password,:username)";
 
@@ -54,11 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'email' => $email
         ])->find();
 
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'email' => $user['email'],
-            'username' => $user['user_name'],
-        ];
+        login($user);
         header('location: /');
         exit();
     }

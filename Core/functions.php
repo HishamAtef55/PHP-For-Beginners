@@ -96,3 +96,35 @@ function view($path, $attribute = [])
 spl_autoload_register(function ($class) {
     require base_path("{$class}.php");
 });
+
+
+/**
+ * login
+ *
+ * @param  mixed $user
+ * @return void
+ */
+function login(
+    array $user
+) {
+    return $_SESSION['user'] = [
+        'id' => $user['id'],
+        'email' => $user['email'],
+        'username' => $user['username'],
+    ];
+    session_regenerate_id();
+}
+
+
+/**
+ * logout
+ *
+ * @return void
+ */
+function logout()
+{
+    session_destroy();
+    $params = session_get_cookie_params();
+    setcookie('PHPSESSID', "", time() - 3600, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+    header('location:/');
+}

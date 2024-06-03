@@ -15,8 +15,12 @@
                             class="<?= urlIs('/about') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
                         <a href="/contact"
                             class="<?= urlIs('/contact') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                        <?php if($_SESSION['user']??false): ?>
                         <a href="/posts"
                             class="<?= urlIs('/posts') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Post</a>
+                        <?php endif; ?>
+
+
                     </div>
                 </div>
             </div>
@@ -28,9 +32,13 @@
                         <!-- Heroicon name: outline/bell -->
                         <?php if ($_SESSION['user'] ?? false) : ?>
                         <span class="text-white"><?= $_SESSION['user']['email'] ?></span>
-
+                        <a href="/logout"
+                            class="<?= urlIs('/logout') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">logout</a>
                         <?php else : ?>
-                        <a href="/register" class="text-white">Register</a>
+                        <a href="/login"
+                            class="<?= urlIs('/login') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">login</a>
+                        <a href="/register"
+                            class="<?= urlIs('/register') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
                         <?php endif; ?>
                     </button>
 
