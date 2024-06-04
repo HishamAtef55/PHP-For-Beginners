@@ -19,9 +19,9 @@ class Route
      * @param  string $method
      * @return void
      */
-    public function __construct($uri, $controller, $method, $middleware = null)
+    public function __construct($uri, $action, $method, $middleware = null)
     {
-        self::$routes[] = compact('uri', 'controller', 'method', 'middleware');
+        self::$routes[] = compact('uri', 'action', 'method', 'middleware');
     }
     /**
      * get
@@ -32,9 +32,9 @@ class Route
      */
     public static function get(
         string $uri,
-        string $controller
+        callable|array $action
     ): self {
-        return new self($uri, $controller, 'GET');
+        return new self($uri, $action, 'GET');
     }
 
     /**
@@ -46,9 +46,9 @@ class Route
      */
     public static function post(
         string $uri,
-        string $controller
+        callable|array $action
     ): self {
-        return new self($uri, $controller, 'POST');
+        return new self($uri, $action, 'POST');
     }
     /**
      * delete
@@ -59,9 +59,9 @@ class Route
      */
     public static function delete(
         string $uri,
-        string $controller
+        callable|array $action
     ): self {
-        return new self($uri, $controller, 'DELETE');
+        return new self($uri, $action, 'DELETE');
     }
     /**
      * patch
@@ -72,9 +72,9 @@ class Route
      */
     public static function patch(
         string $uri,
-        string $controller
+        callable|array $action
     ): self {
-        return  new self($uri, $controller, 'PATCH');
+        return new self($uri, $action, 'PATCH');
     }
     /**
      * put
@@ -85,9 +85,9 @@ class Route
      */
     public static function put(
         string $uri,
-        string $controller
+        callable|array $action
     ): self {
-        return new self($uri, $controller, 'PUT');
+        return new self($uri, $action, 'PUT');
     }
     /**
      * put
@@ -111,7 +111,18 @@ class Route
         foreach (self::$routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === $method) {
                 Middleware::resolve($route['middleware']);
-                return require base_path($route['controller']);
+                if (is_callable($route['action'])) {
+                    return call_user_func($route['action']);
+                }
+                if (is_array($route['action'])) {
+                    [$class, $func] = $route['action'];
+                    if (class_exists($class)) {
+                        $class = new $class();
+                        if (method_exists($class, $func)) {
+                            return call_user_func([$class, $func], []);
+                        }
+                    }
+                }
             }
         }
 
