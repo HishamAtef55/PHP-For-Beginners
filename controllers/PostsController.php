@@ -63,22 +63,11 @@ class PostsController
 
     public function store()
     {
-
-        $errors = [];
-
         $currentUserId = $_SESSION['user']['id'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            if (!Validator::string($_POST['body'], 1, 1000)) {
-                $errors['body'] = 'body is required';
-                return view("Posts/create.blade.php", [
-                    "heading" => "Create Posts",
-                    "errors" =>  $errors,
-                ]);
-            }
-
-            if (empty($errors)) {
+            $validator = new Validator;
+            if ($validator::string($_POST['body'], 1, 1000)) {
                 $this->pdo->query('INSERT INTO posts(title,user_id) VALUES(:title,:user_id)', [
                     'title' => $_POST['body'],
                     'user_id' => $currentUserId,
@@ -86,6 +75,11 @@ class PostsController
                 header("location: /posts");
                 exit();
             }
+            $validator->error('body', 'body is required');
+            return view("Posts/create.blade.php", [
+                "heading" => "Create Posts",
+                "errors" =>  $validator->errors(),
+            ]);
         }
     }
 
@@ -112,9 +106,7 @@ class PostsController
 
             $statement->execute();
 
-            header("location: /posts");
-
-            exit();
+            redirect('/posts');
         }
     }
 
@@ -139,7 +131,7 @@ class PostsController
         // authorize that the current user can edit the note
         authorize($post['user_id'] === $currentUserId);
 
-        view('Posts/edit.blade.php', [
+        return view('Posts/edit.blade.php', [
             'heading' => 'update post',
             'post' => $post,
             'errors' => []
@@ -162,30 +154,23 @@ class PostsController
         authorize($post['user_id'] === $currentUserId);
 
         // validate the form
-        $errors = [];
 
         if ($_POST['_method'] === 'PUT') {
-            if (!Validator::string($_POST['title'], 1, 100)) {
-                $errors['body'] = 'title is required';
-                return view("Posts/edit.blade.php", [
-                    "heading" => "Edit Posts",
-                    'post' => $post,
-                    "errors" =>  $errors,
-                ]);
-            }
-            // if no validation errors, update the record in the notes database table.
-            if (empty($errors)) {
+            $validator = new Validator;
+            if ($validator::string($_POST['title'], 1, 100)) {
                 $q = "UPDATE posts SET title = :title WHERE id=:id";
                 $statement = $this->pdo->connection->prepare($q);
                 $statement->bindParam(':title', $_POST['title']);
                 $statement->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
-                if ($statement->execute()) {
-
-                    header("location: /posts");
-
-                    exit();
-                }
+                $statement->execute();
+                redirect('/posts');
             }
+            $validator->error('body', 'title is required');
+            return view("Posts/edit.blade.php", [
+                "heading" => "Edit Posts",
+                'post' => $post,
+                "errors" => $validator->errors(),
+            ]);
         }
     }
 }

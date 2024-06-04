@@ -5,9 +5,17 @@ namespace Controllers;
 use Core\App;
 use Core\Database;
 use Core\Validator;
+use Core\Authentication;
+use Core\Validation\FormValidation;
 
 class AuthController
 {
+    public readonly Database $pdo;
+
+    public function __construct()
+    {
+        $this->pdo = App::resolve(Database::class);
+    }
 
     public function getRegister()
     {
@@ -23,59 +31,28 @@ class AuthController
         $password = $_POST['password'];
         $user_name = $_POST['user_name'];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            if (!Validator::email($email)) {
-                $errors['email'] = 'please enter avalida email';
-            }
-
-            if (!Validator::string($_POST['password'], 1, 255)) {
-                $errors['password'] = 'please enter avalida password';
-            }
-
-            if (!Validator::string($_POST['user_name'], 1, 255)) {
-                $errors['user_name'] = 'please enter avalida user name';
-            }
-
-            if (!empty($errors)) {
-                return view('Auth/register.blade.php', [
-                    'errors' => $errors,
-                    'heading' => 'Registration'
-                ]);
-            }
-
-
-            $pdo = App::resolve(Database::class);
-
-            $query = "SELECT * FROM users WHERE email = :email";
-
-            $user = $pdo->query($query, [
-                'email' => $email
-            ])->find();
-
-            if ($user) {
-                $errors['email'] = 'user already exists';
-                return view('Auth/register.blade.php', [
-                    'errors' => $errors,
-                    'heading' => 'Registration'
-                ]);
-            } else {
+            $form = new FormValidation();
+            if ($form->validateRegister($email, $password, $user_name)) {
                 $query = "INSERT INTO users (email,password,username) VALUES (:email,:password,:username)";
-
-                $pdo->query($query, [
+                $this->pdo->query($query, [
                     'email' => $email,
                     'password' => password_hash($password, PASSWORD_BCRYPT),
                     'username' => $user_name
                 ]);
                 $query = "SELECT * FROM users WHERE email = :email";
 
-                $user = $pdo->query($query, [
+                $user = $this->pdo->query($query, [
                     'email' => $email
                 ])->find();
 
-                login($user);
-                header('location: /');
-                exit();
+                (new Authentication)->login($user);
+                redirect('/');
             }
+
+            return view('Auth/register.blade.php', [
+                'errors' => $form->errors(),
+                'heading' => 'Registration'
+            ]);
         }
     }
 
@@ -93,57 +70,24 @@ class AuthController
         $email = $_POST['email'];
         $password = $_POST['password'];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            if (!Validator::email($email)) {
-                $errors['email'] = 'please enter avalida email';
+            $form = new FormValidation();
+            if ($form->validateLogin($email, $password)) {
+                if ((new Authentication)->attempt($email, $password)) {
+                    redirect('/');
+                }
+                $form->error('email', 'No matching account found for that email address and password.');
             }
-
-            if (!Validator::string($_POST['password'], 1, 255)) {
-                $errors['password'] = 'please enter avalida password';
-            }
-
-            if (!empty($errors)) {
-                return view('Auth/login.blade.php', [
-                    'errors' => $errors,
-                    'heading' => 'Registration'
-                ]);
-            }
-
-
-            $pdo = App::resolve(Database::class);
-
-            $query = "SELECT * FROM users WHERE email = :email";
-
-            $user = $pdo->query($query, [
-                'email' => $email
-            ])->find();
-
-            if (!$user) {
-                $errors['email'] = 'Invalida Email Address';
-                return view('Auth/login.blade.php', [
-                    'errors' => $errors,
-                    'heading' => 'Registration'
-                ]);
-            }
-
-            if (!password_verify($password, $user['password'])) {
-                $errors['password'] = 'Wrogn password';
-                return view('Auth/login.blade.php', [
-                    'errors' => $errors,
-                    'heading' => 'Registration'
-                ]);
-            }
-            login($user);
-
-            header('location: /');
-            exit();
+            return view('Auth/login.blade.php', [
+                'errors' => $form->errors(),
+                'heading' => 'Sign in'
+            ]);
         }
     }
 
     public function logout()
     {
         if ($_SESSION['user']) {
-            logout();
+            (new Authentication)->logout();
             exit();
         }
     }
