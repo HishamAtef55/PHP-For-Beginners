@@ -6,6 +6,7 @@ use Core\App;
 use Core\Database;
 use Core\Validator;
 use Core\Authentication;
+use Core\Session;
 use Core\Validation\FormValidation;
 
 class AuthController
@@ -20,7 +21,7 @@ class AuthController
     public function getRegister()
     {
         return view('Auth/register.blade.php', [
-            'errors' => [],
+            'errors' => Session::get('errors'),
             'heading' => 'Registration'
         ]);
     }
@@ -48,11 +49,12 @@ class AuthController
                 (new Authentication)->login($user);
                 redirect('/');
             }
-
-            return view('Auth/register.blade.php', [
-                'errors' => $form->errors(),
-                'heading' => 'Registration'
+            Session::flash('errors', $form->errors());
+            Session::flash('old', [
+                'email' => $_POST['email'],
+                'user_name' => $_POST['user_name'],
             ]);
+            redirect('/register');
         }
     }
 
@@ -60,7 +62,7 @@ class AuthController
     {
 
         return view('Auth/login.blade.php', [
-            'errors' => [],
+            'errors' =>  Session::get('errors'),
             'heading' => 'Registration'
         ]);
     }
@@ -77,10 +79,11 @@ class AuthController
                 }
                 $form->error('email', 'No matching account found for that email address and password.');
             }
-            return view('Auth/login.blade.php', [
-                'errors' => $form->errors(),
-                'heading' => 'Sign in'
+            Session::flash('errors', $form->errors());
+            Session::flash('old', [
+                'email' => $_POST['email']
             ]);
+            redirect('/login');
         }
     }
 

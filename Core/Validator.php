@@ -15,10 +15,14 @@ class Validator extends FormValidation
         return strlen($value) > $min && strlen($value) < $max;
     }
 
-    public static function email($email)
+    /**
+     * email
+     *
+     * @param  mixed $email
+     * @return bool
+     */
+    public static function email($email): bool
     {
-        if (filter_has_var(INPUT_POST, 'email')) {
-            return filter_var($email, FILTER_VALIDATE_EMAIL);
-        }
+        return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 }

@@ -18,7 +18,7 @@
                         <label for="user_name" class="sr-only">User name</label>
                         <input id="user_name" name="user_name" type="text" autocomplete="user_name"
                             class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                            placeholder="User name">
+                            placeholder="User name" value="<?= old('user_name') ?>">
                         <?php if (isset($errors['user_name'])) : ?>
                         <li class="text-red-500 text-xs mt-2"><?= $errors['password'] ?></li>
                         <?php endif; ?>
@@ -27,7 +27,7 @@
                         <label for="email" class="sr-only">Email address</label>
                         <input id="email" name="email" type="email" autocomplete="email"
                             class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                            placeholder="Email address" value="">
+                            placeholder="Email address" value="<?= old('email') ?>">
                         <?php if (isset($errors['email'])) : ?>
                         <li class="text-red-500 text-xs mt-2"><?= $errors['email'] ?></li>
                         <?php endif; ?>

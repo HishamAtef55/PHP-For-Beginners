@@ -29,7 +29,6 @@ class FormValidation
             return true;
         } else {
             $this->errors['email'] = 'please enter avalida email';
-            return false;
         }
 
         if (!Validator::string($pasword, 1, 255)) {

@@ -1,0 +1,26 @@
+{
+    "name": "hisham/php2",
+    "authors": [
+        {
+            "name": "hishamatf55",
+            "email": "hishamatf50@gmail.com"
+        }
+    ],
+    "require": {
+        "ramsey/uuid": "^4.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\":"Core/",
+            "Controllers\\":"Controllers/"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.34"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

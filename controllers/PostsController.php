@@ -6,6 +6,7 @@ use PDO;
 use Core\App;
 use Core\Database;
 use Core\Validator;
+use Ramsey\Uuid\Uuid;
 
 class PostsController
 {
@@ -67,8 +68,10 @@ class PostsController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $validator = new Validator;
+            $uuid = Uuid::uuid4()->toString();
             if ($validator::string($_POST['body'], 1, 1000)) {
-                $this->pdo->query('INSERT INTO posts(title,user_id) VALUES(:title,:user_id)', [
+                $this->pdo->query('INSERT INTO posts(id,title,user_id) VALUES(:id,:title,:user_id)', [
+                    'id' =>  $uuid,
                     'title' => $_POST['body'],
                     'user_id' => $currentUserId,
                 ]);

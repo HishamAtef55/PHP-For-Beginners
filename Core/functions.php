@@ -93,12 +93,16 @@ function view($path, $attribute = [])
     require base_path("views/" . $path);
 }
 
-spl_autoload_register(function ($class) {
-    require base_path("{$class}.php");
-});
+// spl_autoload_register(function ($class) {
+//     require base_path("{$class}.php");
+// });
 
 function redirect($path)
 {
     header("location: {$path}");
     exit();
+}
+function old($key)
+{
+    return Core\Session::get('old')[$key] ?? '';
 }
